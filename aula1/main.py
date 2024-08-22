@@ -1,4 +1,7 @@
 class Conta:
+    def __init__(self,saldo,numero):
+        self.numero=numero
+        self.saldo=saldo
     numero:"000"
     saldo:0.0
     def listar(self):
@@ -11,14 +14,13 @@ class Conta:
         self.saldo+=depositar
         self.listar()
 
+def retorno():
+    saldo=int(input("quanto voce quer de saldo? "))
+    numero=int(input("quanto voce quer de numero? "))
+    return (saldo,numero)
 if __name__ == '__main__':
-    conta_nicolas = Conta()
-    conta_nicolas.numero="100"
-    conta_nicolas.saldo=1000000
+    numero,saldo=retorno()
+    conta_nicolas=Conta(saldo,numero)
     conta_nicolas.listar()
-    conta_pedro = Conta()
-    conta_pedro.numero = "200"
-    conta_pedro.saldo = 200
-    conta_pedro.listar()
     deposito=int(input("quanto voce quer depositar? "))
     conta_nicolas.depositar(deposito)
