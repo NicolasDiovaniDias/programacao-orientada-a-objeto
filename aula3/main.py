@@ -9,10 +9,6 @@ class Aluno:
     nota2=0.0
     nome=""
     # exame=None
-    def definir(self,nota1,nota2,nome):
-        self.nota1=nota1
-        self.nota2=nota2
-        self.nome=nome
     def media(self):
         media=(self.nota1+self.nota2)/2
         if(media>7):
