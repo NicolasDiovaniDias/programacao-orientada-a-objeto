@@ -9,6 +9,8 @@ class Gato(pet.Pet):
     def __init__(self, nome, raca, especie, genero, idade, tutor, localResgatado, resgatador, abrigo, porte, cor, caracteristicas):
         super().__init__(nome, raca, especie, genero, idade, tutor, localResgatado, resgatador, abrigo, porte, cor, caracteristicas)
     def miar(self):
-        print(f"o gato {self.nome} esta miando")
+        print(f"o gato(a) {self.nome} esta miando")
     def ronronar(self):
-        print(f"o gato {self.nome} esta ronronando")
+        print(f"o gato(a) {self.nome} esta ronronando")
+    def subirEmArvores(self):
+        print(f"o gato(a) {self.nome} subiu uma arvore")

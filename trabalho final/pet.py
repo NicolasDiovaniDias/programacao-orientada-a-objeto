@@ -12,3 +12,4 @@ class Pet(animais.Animal):
         self.cor=cor
         self.caracteristicas=caracteristicas
         super().__init__(nome, raca, especie, genero, idade, tutor, localResgatado, resgatador, abrigo)
+    
