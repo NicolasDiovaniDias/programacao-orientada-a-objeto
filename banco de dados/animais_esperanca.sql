@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/11/2024 às 20:06
+-- Tempo de geração: 14/11/2024 às 20:07
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -20,6 +20,32 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `animais_esperanca`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `animais`
+--
+
+CREATE TABLE `animais` (
+  `id_animais` int(11) NOT NULL,
+  `nome` varchar(50) NOT NULL,
+  `raca` varchar(50) NOT NULL,
+  `especie` varchar(50) NOT NULL,
+  `genero` varchar(1) NOT NULL,
+  `idade` varchar(2) NOT NULL,
+  `localResgatado` varchar(50) NOT NULL,
+  `resgatador` varchar(50) NOT NULL,
+  `abrigo` varchar(50) NOT NULL,
+  `fk_tutores` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `animais`
+--
+
+INSERT INTO `animais` (`id_animais`, `nome`, `raca`, `especie`, `genero`, `idade`, `localResgatado`, `resgatador`, `abrigo`, `fk_tutores`) VALUES
+(2, 'andrezitos', 'humana', 'youtuber', 'M', '27', 'santos', 'deus', 'santos', 1);
 
 -- --------------------------------------------------------
 
@@ -55,6 +81,13 @@ INSERT INTO `tutores` (`id_tutores`, `nome`, `telefone`, `endereco`, `email`, `s
 --
 
 --
+-- Índices de tabela `animais`
+--
+ALTER TABLE `animais`
+  ADD PRIMARY KEY (`id_animais`),
+  ADD KEY `fk_tutores` (`fk_tutores`);
+
+--
 -- Índices de tabela `tutores`
 --
 ALTER TABLE `tutores`
@@ -65,10 +98,26 @@ ALTER TABLE `tutores`
 --
 
 --
+-- AUTO_INCREMENT de tabela `animais`
+--
+ALTER TABLE `animais`
+  MODIFY `id_animais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de tabela `tutores`
 --
 ALTER TABLE `tutores`
   MODIFY `id_tutores` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- Restrições para tabelas despejadas
+--
+
+--
+-- Restrições para tabelas `animais`
+--
+ALTER TABLE `animais`
+  ADD CONSTRAINT `fk_tutores` FOREIGN KEY (`fk_tutores`) REFERENCES `tutores` (`id_tutores`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
