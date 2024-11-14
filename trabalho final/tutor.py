@@ -66,7 +66,8 @@ class Tutor():
             if resultado[i][2]== id_tutores:
                 print(f"{i+1} - {resultado[i][1]}")
         animal_destutelar=int(input("qual animal voce quer destutelar? "))
-        cursor.execute("UPDATE animais SET fk_tutores = null WHERE id_animais = %s",(animal_destutelar-1,))
+        cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(animal_destutelar-1,))
         conexao.commit()
 # Tutor.login()
 Tutor.destutelar_animal()
+conexao.close()
