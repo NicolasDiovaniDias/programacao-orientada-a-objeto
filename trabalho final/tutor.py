@@ -33,26 +33,31 @@ class Tutor():
         print("##LOGIN##")
         while True:
             email=input("qual seu email? ")
-            cursor.execute("SELECT email,senha FROM tutores WHERE email = %s",(email,))
+            cursor.execute("SELECT email, senha, id_tutores FROM tutores WHERE email = %s",(email,))
             resultado = cursor.fetchall()
             if(len(resultado)!=0):
                 senha=input("digite sua senha: ")
                 for i in range(len(resultado)):
                     if(resultado[i][1]==senha):
-                        print(resultado[i])
                         print("acesso liberado")
-                        return
+                        return resultado[i][2]
             else:
                 print("email inexistente")
         
-    def adotarAnimal():
-        cursor.execute("select id, nome from animais")
+    def tutelarAnimal():
+        cursor.execute("select id_animais, nome from animais")
         resultado = cursor.fetchall()
-        print("que bom que voce quer adotar um dos nossos animais, aqui segue a lista de animais pra adocao: ")
+        print("que bom que voce quer ser o tutor de um dos nossos animais, aqui segue a lista de animais, primeiro faça login: ")
         ids=[]
+        id_tutores=Tutor.login()
         for i in range(len(resultado)):
             print(f"{i+1} - {resultado[i][1]}")
             ids.append(resultado[i][0])
-            conexao.commit()
-# Tutor.registrar_tutor()            
-Tutor.registrar_tutor()
+        animal_adotar = int(input("qual voce quer adotar? "))
+        cursor.execute("UPDATE animais SET fk_tutores = %s WHERE id_animais = %s",(id_tutores,ids[animal_adotar-1]))
+        conexao.commit()
+        print(f"{resultado[animal_adotar-1][1]} adotado! ")
+    def destutelar_animal():
+        
+# Tutor.login()
+Tutor.tutelarAnimal()
