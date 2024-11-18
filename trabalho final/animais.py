@@ -13,7 +13,6 @@
 # emitirSom(): Simula o animal emitindo som (latido, miado, etc.).
 # toString(): Retorna uma string com as informações do animal
 # from tkinter import *
-import tutor
 import mysql.connector
 from mysql.connector import Error
 conexao = mysql.connector.connect(
@@ -73,8 +72,6 @@ def retorno():
     #         return()
     #     print("voce digitou um valor invalido")
     return (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
-def pesquisar():
-    cursor
 nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo = retorno()
 animal1=Animal(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
 cursor.execute("INSERT INTO animais (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo))

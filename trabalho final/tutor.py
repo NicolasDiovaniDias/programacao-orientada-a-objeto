@@ -57,17 +57,21 @@ class Tutor():
         cursor.execute("UPDATE animais SET fk_tutores = %s WHERE id_animais = %s",(id_tutores,ids[animal_tutelar-1]))
         conexao.commit()
         print(f"{resultado[animal_tutelar-1][1]} adotado! ")
-    def destutelar_animal():
+    def destutelarAnimal():
         cursor.execute("select id_animais, nome, fk_tutores from animais")
         resultado = cursor.fetchall()
+        ids=[]
         id_tutores=Tutor.login()
         print("que segue a lista de dos animais em sua tutela: ")
         for i in range(len(resultado)):
             if resultado[i][2]== id_tutores:
                 print(f"{i+1} - {resultado[i][1]}")
+                ids.append(resultado[i][0])
         animal_destutelar=int(input("qual animal voce quer destutelar? "))
-        cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(animal_destutelar-1,))
+        cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(ids[animal_destutelar-1],))
         conexao.commit()
 # Tutor.login()
-Tutor.destutelar_animal()
-conexao.close()
+# Tutor.tutelarAnimal()
+if __name__ == "_tutor__":
+    Tutor.destutelarAnimal()
+conexao.close() 
