@@ -58,20 +58,31 @@ class Tutor():
         conexao.commit()
         print(f"{resultado[animal_tutelar-1][1]} adotado! ")
     def destutelarAnimal():
-        cursor.execute("select id_animais, nome, fk_tutores from animais")
+        cursor.execute("SELECT id_animais, nome, fk_tutores FROM animais")
         resultado = cursor.fetchall()
-        ids=[]
         id_tutores=Tutor.login()
-        print("que segue a lista de dos animais em sua tutela: ")
+        print(Tutor.login())
+        ids=[]
+        print("segue a lista de dos animais em sua tutela: ")
         for i in range(len(resultado)):
             if resultado[i][2]== id_tutores:
-                print(f"{i+1} - {resultado[i][1]}")
+                print(f"{resultado[i][0]} - {resultado[i][1]}")
                 ids.append(resultado[i][0])
-        animal_destutelar=int(input("qual animal voce quer destutelar? "))
-        cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(ids[animal_destutelar-1],))
-        conexao.commit()
+        if not ids:
+            print("voce não tem nenhum animal em sua tutela! ")
+            return()   
+        while True:    
+            animal_destutelar=int(input("qual animal voce quer destutelar? "))
+            if resultado[animal_destutelar][2]== id_tutores:
+                cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(animal_destutelar,))
+                conexao.commit()
+                break
+            print("esse animal não está sobre sua tutela")
 # Tutor.login()
 # Tutor.tutelarAnimal()
-if __name__ == "_tutor__":
-    Tutor.destutelarAnimal()
+
+# Tutor.tutelarAnimal()
+# Tutor.tutelarAnimal()
+Tutor.destutelarAnimal()
 conexao.close() 
+#vou jogar com o leo, resolver problema da verificação se o tutor n esta destutelando o animal de outro tutor
