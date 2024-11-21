@@ -61,26 +61,29 @@ class Tutor():
         cursor.execute("SELECT id_animais, nome, fk_tutores FROM animais")
         resultado = cursor.fetchall()
         id_tutores=Tutor.login()
-        print(Tutor.login())
+        print(resultado, id_tutores)
         ids=[]
         print("segue a lista de dos animais em sua tutela: ")
         for i in range(len(resultado)):
             if resultado[i][2]== id_tutores:
-                print(f"{resultado[i][0]} - {resultado[i][1]}")
+                print(f"{i+1} - {resultado[i][1]}")
                 ids.append(resultado[i][0])
         if not ids:
             print("voce não tem nenhum animal em sua tutela! ")
             return()   
         while True:    
             animal_destutelar=int(input("qual animal voce quer destutelar? "))
-            if resultado[animal_destutelar][2]== id_tutores:
-                cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(animal_destutelar,))
-                conexao.commit()
-                break
+            for i in range(len(resultado)):
+                if resultado[animal_destutelar-1][2] == id_tutores:
+                    print("aaaaaaaaaaaaaaaaaaaa")
+                    cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(ids[animal_destutelar-1],))
+                    conexao.commit()
+                    return
+                elif ValueError:
+                    print("valor invalido")
             print("esse animal não está sobre sua tutela")
 # Tutor.login()
 # Tutor.tutelarAnimal()
-
 # Tutor.tutelarAnimal()
 # Tutor.tutelarAnimal()
 Tutor.destutelarAnimal()
