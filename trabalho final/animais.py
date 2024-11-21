@@ -14,7 +14,6 @@
 # toString(): Retorna uma string com as informações do animal
 # from tkinter import *
 import mysql.connector
-from mysql.connector import Error
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
