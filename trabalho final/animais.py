@@ -1,30 +1,16 @@
-# nome: Nome do animal.
-# raca: Raça do animal (ex: Labrador Retriever, SRD).
-# especie: Espécie do animal (ex: Cão, Gato).
-# genero: Sexo do animal (ex: macho, fêmea).
-# idade: Idade do animal em meses ou anos.
-# tutor: Objeto da classe Tutor que representa o dono do animal (se houver).
-# localResgatado: Local onde o animal foi resgatado.
-# resgatador: Objeto da classe Pessoa ou Entidade que resgatou o animal.
-# abrigo: Objeto da classe Abrigo que representa o abrigo onde o animal está.
-# Métodos:
-# comer(): Simula o animal comendo.
-# brincar(): Simula o animal brincando.
-# emitirSom(): Simula o animal emitindo som (latido, miado, etc.).
-# toString(): Retorna uma string com as informações do animal
-# from tkinter import *
 import mysql.connector
+from datetime import datetime
+
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
     password='',
     database='animais_esperanca',
 )
+
 cursor=conexao.cursor()
-cursor.execute("select * from animais where nome = 'joao'")
-resultado = cursor.fetchall()
-print(resultado)
 class Animal:
+    
     def __init__(self, nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo):
         self.nome=nome
         self.raca=raca
@@ -34,18 +20,28 @@ class Animal:
         self.localResgatado=localResgatado
         self.resgatador=resgatador
         self.abrigo=abrigo
+        
     def comer(self):
         print(f"o animal {self.nome} esta comendo")
+        
     def brincar(self):
         print(f"o animal {self.nome} esta brincando")
+        
     def emitirSom(self):
-        print(f"AU! AU! AU! AU! AU! AU! AU! AU!")
-    def toString(self):
-        print(f"nome: {self.nome}\nraça: {self.raca}\nespecie: {self.especie}\ngenero: {self.genero}\nidade: {self.idade}\nlocalResgatado: {self.localResgatado}\nresgatador: {self.resgatador}\nabrigo: {self.abrigo}")
+        print(f"o animal {self.nome} esta emitindo som")
+        
 def retorno():
     nome = input(f"qual o nome do animal? ")
+    while True:
+        especie= input(f"qual a especie do(a) {nome} ?\n1-cão\n2-gato ")
+        if especie=="1":
+            especie="cão"
+            break
+        elif especie=="2":
+            especie="gato"
+            break
+        print("valor invalido")
     raca = input(f"qual a raca do(a) {nome} ? ") 
-    especie= input(f"qual a especie do(a) {nome} ? ")
     while True:
         genero=input(f"qual o genero do(a) {nome} ?\n1-Macho\n2-Femea\n") 
         if (genero=="1"):
@@ -59,6 +55,52 @@ def retorno():
     localResgatado = input(f"onde o(a) {nome} foi resgatado(a) ? ")
     resgatador = input(f"quem resgatou o(a) {nome} ? ") 
     abrigo = input(f"em que abrigo o(a) {nome} esta ? ")
+    return (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
+
+def enviar_banco():
+    nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo = retorno()
+    animal1=Animal(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
+    cursor.execute("INSERT INTO animais (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo))
+    id = cursor.lastrowid
+    data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o animal {animal1.nome} do id: {id} foi inserido',data_hora))
+    conexao.commit()
+    if animal1.especie == "cão":
+        import cao
+        cao.passar_argumentos(animal1,id)
+    elif animal1.especie == "gato":
+        import gato
+        gato.passar_argumentos(animal1,id)
+    return animal1
+    
+def toString():
+    pesquisa_animal=input("qual o nome do animal que voce quer ver os dados? ")
+    cursor.execute("SELECT id_animais, nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo FROM animais WHERE nome = %s",(pesquisa_animal,))
+    resultado = cursor.fetchall()      
+    print(f'''
+          {'nome:' :<15}{resultado[0][1]}
+          {'raca:' :<15}{resultado[0][2]}
+          {'especie:' :<15}{resultado[0][3]}
+          {'genero:' :<15}{resultado[0][4]}
+          {'idade:' :<15}{resultado[0][5]}
+          {'LocalResgatado:' :<15}{resultado[0][6]}
+          {'resgatador:' :<15}{resultado[0][7]}
+          {'abrigo:' :<15}{resultado[0][8]}
+          ''')
+    # print(f"nome: {self.nome}\nraça: {self.raca}\nespecie: {self.especie}\ngenero: {self.genero}\nidade: {self.idade}\nlocalResgatado: {self.localResgatado}\nresgatador: {self.resgatador}\nabrigo: {self.abrigo}")
+if __name__ == "__main__":
+    animal1=enviar_banco()
+    toString()   
+    animal1.comer()     
+    # janela = Tk()
+    # janela.mainloop()
+    # data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # print(data_hora)
+    # cursor.execute("INSERT INTO historico (historico, data)values('aaaaaaaaaaaaaaa nicolas',%s)",(data_hora,))
+    conexao.commit()
+    conexao.close()
+
+
     # while True:
     #     adotado=(input("o animal já foi adotado?\n1-sim\n2-não"))
     #     if(adotado=="1"):
@@ -70,14 +112,3 @@ def retorno():
     #         adotado=("")
     #         return()
     #     print("voce digitou um valor invalido")
-    return (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
-nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo = retorno()
-animal1=Animal(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
-cursor.execute("INSERT INTO animais (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo))
-conexao.commit()
-conexao.close()
-animal1.toString()   
-animal1.comer()     
-# janela = Tk()
-# janela.mainloop()
-

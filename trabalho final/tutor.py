@@ -1,5 +1,5 @@
 import mysql.connector
-
+from datetime import datetime
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -23,6 +23,9 @@ class Tutor():
             if(senha==repeat_senha):
                 print("usuario cadastrado!")
                 cursor.execute("INSERT INTO tutores (nome, telefone, endereco, email, senha) VALUES(%s,%s,%s,%s,%s)",(nome, telefone, endereço, email, senha))
+                id = cursor.lastrowid
+                data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o tutor {nome}({id}) foi inserido',data_hora))
                 conexao.commit()
                 break
             else:
@@ -48,15 +51,15 @@ class Tutor():
         cursor.execute("SELECT id_animais, nome, fk_tutores FROM animais")
         resultado = cursor.fetchall()
         id_tutores=Tutor.login()
-        print(resultado, id_tutores)
         ids=[]
         print("segue a lista de dos animais para tutela: ")
         for i in range(len(resultado)):
-            print(f"{i+1} - {resultado[i][1]}")
-            ids.append(resultado[i][0])
+            if resultado[i][0]is not None and resultado[i][2]!=id_tutores:
+                print(f"{i+1} - {resultado[i][1]}")
+                ids.append(resultado[i][0])
         if not ids:
             print("voce não tem nenhum animal em sua tutela! ")
-            return()
+            return
         while True:
             animal_tutelar=int(input("qual animal você quer tutelar? "))
             teste=True
@@ -71,11 +74,19 @@ class Tutor():
                         break
                     print(f"{resultado[animal_tutelar-1][1]} tutelado")
                     cursor.execute("UPDATE animais SET fk_tutores = %s WHERE id_animais = %s", (id_tutores, ids[animal_tutelar-1]))
+                    cursor.execute("SELECT id_tutores, nome FROM tutores WHERE id_tutores = %s", (id_tutores,))
+                    nome_tutor = cursor.fetchone()
+                    cursor.execute("SELECT id_animais, nome FROM animais WHERE id_animais = %s", (ids[animal_tutelar-1],))
+                    nome_animal = cursor.fetchone()
+                    data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o animal {nome_animal[1]} ({nome_animal[0]}) foi tutelado por {nome_tutor[1]} ({nome_tutor[0]})',data_hora))
+
                     conexao.commit()
                     return
                 elif resultado[animal_tutelar-1][2] == id_tutores:
                     print("esse animal já esta sobre sua tutela! ")
                     return
+                
     def destutelarAnimal():
         cursor.execute("SELECT id_animais, nome, fk_tutores FROM animais")
         resultado = cursor.fetchall()
@@ -101,12 +112,19 @@ class Tutor():
                 elif resultado[animal_destutelar-1][2] == id_tutores:
                     print(f"{resultado[i][1]} destutelado")
                     cursor.execute("UPDATE animais SET fk_tutores = NULL WHERE id_animais = %s",(ids[animal_destutelar-1],))
+                    cursor.execute("SELECT id_tutores, nome FROM tutores WHERE id_tutores = %s", (id_tutores,))
+                    nome_tutor = cursor.fetchone()
+                    cursor.execute("SELECT id_animais, nome FROM animais WHERE id_animais = %s", (ids[animal_destutelar-1],))
+                    nome_animal = cursor.fetchone()
+                    data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o animal {nome_animal[1]} ({nome_animal[0]}) foi destutelado por {nome_tutor[1]} ({nome_tutor[0]})',data_hora))
+
                     conexao.commit()
                     return
             print("esse animal não está sobre sua tutela")
 # Tutor.registrar_tutor()
 # Tutor.login()
-Tutor.tutelarAnimal()
+Tutor.tutelarAnimal() 
 # Tutor.destutelarAnimal()
 conexao.close() 
 #vou jogar com o leo, resolver problema da verificação se o tutor n esta destutelando o animal de outro tutor
