@@ -21,5 +21,5 @@ class Gato(animais.Animal):
 def passar_argumentos(animal1, id_animais):
     cor=input(f"qual a cor do {animal1.nome}? ")
     caracteristicas=input(f"quais são as caracteristicas do {animal1.nome}? ")
-    cursor.execute("INSERT INTO gatos (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo, cor, caracteristicas, fk_animais) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(animal1.nome,animal1.raca,animal1.especie,animal1.genero,animal1.idade,animal1.localResgatado,animal1.resgatador,animal1.abrigo,    cor,caracteristicas,id_animais))
+    cursor.execute("INSERT INTO gatos (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo, cor, caracteristicas, fk_animais) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(animal1.nome,animal1.raca,animal1.especie,animal1.genero,animal1.idade,animal1.localResgatado,animal1.resgatador,animal1.abrigo,cor,caracteristicas,id_animais))
     conexao.commit()

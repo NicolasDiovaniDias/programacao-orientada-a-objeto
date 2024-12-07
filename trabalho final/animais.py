@@ -1,6 +1,4 @@
 import mysql.connector
-from datetime import datetime
-
 conexao = mysql.connector.connect(
     host='localhost',
     user='root',
@@ -98,16 +96,3 @@ if __name__ == "__main__":
     # cursor.execute("INSERT INTO historico (historico, data)values('aaaaaaaaaaaaaaa nicolas',%s)",(data_hora,))
     conexao.commit()
     conexao.close()
-
-
-    # while True:
-    #     adotado=(input("o animal já foi adotado?\n1-sim\n2-não"))
-    #     if(adotado=="1"):
-    #         tutor.Tutor.adotarAnimal()
-    #         print("animal adotado! ")
-    #         break
-    #     elif(adotado=="2"):
-    #         print("animal já foi adotado")
-    #         adotado=("")
-    #         return()
-    #     print("voce digitou um valor invalido")
