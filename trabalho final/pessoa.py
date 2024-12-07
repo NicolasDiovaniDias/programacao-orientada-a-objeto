@@ -24,8 +24,7 @@ def registrar_pessoa():
                 print("usuario cadastrado!")
                 cursor.execute("INSERT INTO pessoas (nome, telefone, cpf, email, senha) VALUES(%s,%s,%s,%s,%s)",(nome, telefone, cpf, email, senha))
                 id = cursor.lastrowid
-                data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'a pessoa {nome}({id}) foi inserida',data_hora))
+                cursor.execute("INSERT INTO historico (historico) values(%s)",(f'a pessoa {nome}({id}) foi inserida',))
                 conexao.commit()
                 break
             else:
@@ -45,35 +44,38 @@ def login():
             else:
                 print("email inexistente")
 def adotar_animal():
-    cursor.execute("SELECT id_animais, nome, idade, especie, raca, fk_pessoas FROM animais")
+    cursor.execute("SELECT id_animais, nome, idade, especie, raca, fk_pessoas, situacao FROM animais")
     resultado = cursor.fetchall()
     id_pessoas=login()
     ids=[]
+    print(resultado)
     print("segue a lista de dos animais para adoção: ")
     for i in range(len(resultado)):
-        print(f"{i+1} - {resultado[i][1]}")
-        ids.append(resultado[i][0])
+        if resultado[i][0]is not None and resultado[i][5]!=id_pessoas and resultado[i][6] == "A":
+            print(f"{i+1} - {resultado[i][1]}")
+            ids.append(resultado[i][0])
+        else:
+            ids.append("indisponivel")
     while True:
         animal_adotar=int(input("qual animal você quer adotar? "))
-        teste=True
         for i in range(len(resultado)):
-            print("a")
-            if len(ids)<animal_adotar-1 or resultado[animal_adotar-1][5] is None:
+            if ids[animal_adotar-1] == "indisponivel":
+                print("valor invalido")
+                break
+            if len(ids)<animal_adotar-1:
                 if teste==True:
                     print("valor invalido!")
                     teste=False
-                data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                cursor.execute("DELETE FROM animais WHERE id_animais = %s;",(resultado[animal_adotar-1][0],))    
-                #arrumar problema aqui
-                cursor.execute("INSERT INTO animais_adotados (nome, idade, especie, raca, data_adocao, fk_pessoas) VALUES(%s,%s,%s,%s,%s,%s)",(resultado[animal_adotar-1][1],resultado[animal_adotar-1][2],resultado[animal_adotar-1][3],resultado[animal_adotar-1][4],data_hora,resultado[animal_adotar-1][0] ))
-                #remover o animal da tabela animais e adicionar na tabela animais adotados
+            if len(ids)>animal_adotar-1 or resultado[animal_adotar-1][5] is not None:
+                cursor.execute("UPDATE animais SET situacao = 'I', fk_tutores = NULL WHERE id_animais = %s;",(resultado[animal_adotar-1][0],))    
+                cursor.execute("INSERT INTO animais_adotados (nome, idade, especie, raca, data_adocao, fk_pessoas) VALUES(%s,%s,%s,%s,%s,%s)",(resultado[animal_adotar-1][1],resultado[animal_adotar-1][2],resultado[animal_adotar-1][3],resultado[animal_adotar-1][4],data_hora,id_pessoas ))
                 cursor.execute("UPDATE animais SET fk_pessoas = %s WHERE id_animais = %s", (id_pessoas, ids[animal_adotar-1]))
                 print(f"{resultado[animal_adotar-1][1]} adotado")
                 cursor.execute("SELECT id_pessoas, nome FROM pessoas WHERE id_pessoas = %s", (id_pessoas,))
                 nome_tutor = cursor.fetchone()
                 cursor.execute("SELECT id_animais, nome FROM animais WHERE id_animais = %s", (ids[animal_adotar-1],))
                 nome_animal = cursor.fetchone()
-                cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o animal {nome_animal[1]} ({nome_animal[0]}) foi adotado por {nome_tutor[1]} ({nome_tutor[0]})',data_hora))
+                cursor.execute("INSERT INTO historico (historico) values(%s)",(f'o animal {nome_animal[1]} ({nome_animal[0]}) foi adotado por {nome_tutor[1]} ({nome_tutor[0]})',))
                 conexao.commit()
                 return
             else:

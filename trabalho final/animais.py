@@ -62,8 +62,7 @@ def enviar_banco():
     animal1=Animal(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
     cursor.execute("INSERT INTO animais (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",(nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo))
     id = cursor.lastrowid
-    data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    cursor.execute("INSERT INTO historico (historico, data) values(%s,%s)",(f'o animal {animal1.nome} do id: {id} foi inserido',data_hora))
+    cursor.execute("INSERT INTO historico (historico) values(%s)",(f'o animal {animal1.nome} do id: {id} foi inserido',))
     conexao.commit()
     if animal1.especie == "cão":
         import cao
