@@ -52,7 +52,25 @@ def retorno():
     idade = input(f"qual a idade do(a) {nome} ? ")
     localResgatado = input(f"onde o(a) {nome} foi resgatado(a) ? ")
     resgatador = input(f"quem resgatou o(a) {nome} ? ") 
-    abrigo = input(f"em que abrigo o(a) {nome} esta ? ")
+    cursor.execute("SELECT id_abrigos,nome FROM abrigos")
+    resultado = cursor.fetchall()  
+    while True:
+        check=False
+        for i in range(len(resultado)):
+            print(f'{resultado[i][0]} - {resultado[i][1]}')
+        abrigo = input(f"em que abrigo o(a) {nome} esta ?")
+        try:
+            numero=int(abrigo)
+            for i in range(len(resultado)):
+                if resultado[i][0]==int(abrigo):
+                    check=True
+            if check==True:
+                break
+            print("valor invalido")
+        except:
+            print("valor invalido")
+            
+    
     return (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo)
 
 def enviar_banco():

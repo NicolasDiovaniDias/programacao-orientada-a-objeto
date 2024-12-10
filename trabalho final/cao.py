@@ -20,7 +20,18 @@ class Cao(animais.Animal):
     def correr(self):
         print(f"o cao {self.nome} esta correndo")
 def passar_argumentos(animal1, id_animais):
-    porte=input(f"qual o porte do {animal1.nome}? ")
+    while True:
+        porte=input(f"qual o porte do(a) {animal1.nome} ?\n1-Grande\n2-Medio\n3-Pequeno\n") 
+        if (porte=="1"):
+            porte="G"
+            break
+        elif (porte=="2"):
+            porte="M"
+            break
+        elif (porte=="3"):
+            porte="P"
+            break
+        print("valor invalido!")
     cor=input(f"qual a cor do {animal1.nome}? ")
     caracteristicas=input(f"quais são as caracteristicas do {animal1.nome}? ")
     cursor.execute("INSERT INTO caes (nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo, porte, cor, caracteristicas, fk_animais) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(animal1.nome,animal1.raca,animal1.especie,animal1.genero,animal1.idade,animal1.localResgatado,animal1.resgatador,animal1.abrigo,porte,cor,caracteristicas,id_animais))

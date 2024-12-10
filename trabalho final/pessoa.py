@@ -1,5 +1,4 @@
 import mysql.connector
-from datetime import datetime
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -70,6 +69,7 @@ def adotar_animal():
                 cursor.execute("UPDATE animais SET situacao = 'I', fk_tutores = NULL WHERE id_animais = %s;",(resultado[animal_adotar-1][0],))    
                 cursor.execute("INSERT INTO animais_adotados (nome, idade, especie, raca, fk_pessoas) VALUES(%s,%s,%s,%s,%s)",(resultado[animal_adotar-1][1],resultado[animal_adotar-1][2],resultado[animal_adotar-1][3],resultado[animal_adotar-1][4],id_pessoas ))
                 cursor.execute("UPDATE animais SET fk_pessoas = %s WHERE id_animais = %s", (id_pessoas, ids[animal_adotar-1]))
+                cursor.execute("UPDATE animais SET abrigo = NULL WHERE id_animais = %s", (ids[animal_adotar-1],))
                 print(f"{resultado[animal_adotar-1][1]} adotado")
                 cursor.execute("SELECT id_pessoas, nome FROM pessoas WHERE id_pessoas = %s", (id_pessoas,))
                 nome_tutor = cursor.fetchone()
@@ -80,6 +80,6 @@ def adotar_animal():
                 return
             else:
                 print("nicolas")
-registrar_pessoa()
-# adotar_animal()
+# registrar_pessoa()
+adotar_animal()
     
