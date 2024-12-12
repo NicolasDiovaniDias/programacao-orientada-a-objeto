@@ -91,22 +91,37 @@ def enviar_banco():
 def toString():
     pesquisa_animal=input("qual o nome do animal que voce quer ver os dados? ")
     cursor.execute("SELECT id_animais, nome, raca, especie, genero, idade, localResgatado, resgatador, abrigo FROM animais WHERE nome = %s",(pesquisa_animal,))
-    resultado = cursor.fetchall()      
-    print(f'''
-          {'nome:' :<15}{resultado[0][1]}
-          {'raca:' :<15}{resultado[0][2]}
-          {'especie:' :<15}{resultado[0][3]}
-          {'genero:' :<15}{resultado[0][4]}
-          {'idade:' :<15}{resultado[0][5]}
-          {'LocalResgatado:' :<15}{resultado[0][6]}
-          {'resgatador:' :<15}{resultado[0][7]}
-          {'abrigo:' :<15}{resultado[0][8]}
-          ''')
+    resultado = cursor.fetchall()    
+    if len(resultado)==0:
+        print("nenhuma animal encontrado! ")
+    elif len(resultado)==1: 
+        print(f'''
+            {'nome:' :<16}{resultado[0][1]}
+            {'raca:' :<16}{resultado[0][2]}
+            {'especie:' :<16}{resultado[0][3]}
+            {'genero:' :<16}{resultado[0][4]}
+            {'idade:' :<16}{resultado[0][5]}
+            {'LocalResgatado:' :<16}{resultado[0][6]}
+            {'resgatador:' :<16}{resultado[0][7]}
+            {'abrigo:' :<16}{resultado[0][8]}
+            ''')
+    else:
+        print("foram encontrados mais de uma animal com esse nome")
+        for i in range(len(resultado)):
+            print(f'''
+                    {'nome:' :<16}{resultado[i][1]}
+                    {'raca:' :<16}{resultado[i][2]}
+                    {'especie:' :<16}{resultado[i][3]}
+                    {'genero:' :<16}{resultado[i][4]}
+                    {'idade:' :<16}{resultado[i][5]}
+                    {'LocalResgatado:' :<16}{resultado[i][6]}
+                    {'resgatador:' :<16}{resultado[i][7]}
+                    {'abrigo:' :<16}{resultado[i][8]}''')
     # print(f"nome: {self.nome}\nraça: {self.raca}\nespecie: {self.especie}\ngenero: {self.genero}\nidade: {self.idade}\nlocalResgatado: {self.localResgatado}\nresgatador: {self.resgatador}\nabrigo: {self.abrigo}")
 if __name__ == "__main__":
     animal1=enviar_banco()
-    toString()   
-    animal1.comer()     
+    # toString()   
+    # animal1.comer()     
     # janela = Tk()
     # janela.mainloop()
     # data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

@@ -16,8 +16,6 @@ def adicionarAbrigo():
     nome=input("qual o nome do abrigo? ")
     endereco=input("qual o endereço? ")
     capacidade=int(input("qual a capacidade do abrigo? "))
-    return nome, endereco, capacidade
-nome, endereco, capacidade=adicionarAbrigo()
-cursor.execute("INSERT INTO abrigos (nome, endereco, capacidade) VALUES(%s,%s,%s)",(nome, endereco, capacidade))
-conexao.commit()
-Abrigos1= Abrigos(nome, endereco, capacidade)
+    cursor.execute("INSERT INTO abrigos (nome, endereco, capacidade) VALUES(%s,%s,%s)",(nome, endereco, capacidade))
+    conexao.commit()
+adicionarAbrigo()
